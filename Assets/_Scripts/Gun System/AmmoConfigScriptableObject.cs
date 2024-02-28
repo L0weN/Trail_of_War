@@ -1,0 +1,32 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "Ammo Config", menuName = "Guns/Ammo Config", order = 3)]
+public class AmmoConfigScriptableObject : ScriptableObject
+{
+    public int MaxAmmo = 120;
+    public int ClipSize = 30;
+
+    public int CurrentAmmo = 120;
+    public int CurrentClipAmmo = 30;
+
+    private void OnEnable()
+    {
+        CurrentAmmo = MaxAmmo;
+        CurrentClipAmmo = ClipSize;
+    }
+
+    public void Reload()
+    {
+        int maxReloadAmount = Mathf.Min(ClipSize, CurrentAmmo);
+        int availableBulletsInCurrentClip = ClipSize - CurrentClipAmmo;
+        int reloadAmount = Mathf.Min(maxReloadAmount, availableBulletsInCurrentClip);
+
+        CurrentClipAmmo += reloadAmount;
+        CurrentAmmo -= reloadAmount;
+    }
+
+    public bool CanReload()
+    {
+        return CurrentClipAmmo < ClipSize && CurrentAmmo > 0;
+    }
+}
